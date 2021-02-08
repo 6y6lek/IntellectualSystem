@@ -1,0 +1,126 @@
+/******************************************************************************
+
+                            Online Prolog Compiler.
+                Code, Compile, Run and Debug Prolog program online.
+Write your code in this editor and press "Run" button to execute it.
+
+*******************************************************************************/
+
+
+:- dynamic yes/1, no/1.
+
+%Розміщення в резидентній Базі Даних інформації з тверджень Бази Знань
+     assert_database:-
+           rule(Rule_number,Category,Type_of_breed,Conditions),
+           assertz(d_rule(Rule_number,Category,Type_of_breed,Conditions)),fail.
+
+     assert_database:-
+           cond(Cond_number,Condition),
+           assertz(d_cond(Cond_number,Condition)),fail.
+
+     assert_database:-!.
+
+ % Характеристики різних професій 
+      cond(1,"професія сфери будівельних робіт").
+      cond(2,"професія сфери обслуговування").
+      cond(3,"робота з бетонування монолітних і збірних конструкцій").
+      cond(4,"спорудження будинків").
+      cond(5,"буріння землі або гірських порід").
+      cond(6,"приготування кави").
+      cond(7,"приготування алкогольних напоїв").
+      cond(8, "обслуговування пасажирів у транспорті").
+      cond(9, "робота з фінансами в банку").
+      cond(10,"формування асортименту в магазині").
+
+   
+   % Інформація про конкретні професії
+     rule(1,"професія","сфери будівельних робіт",[1]).
+     rule(2,"професія","сфери обслуговування",[2]).
+     rule(3,"сфери будівельних робіт","бетоняр",[3]).
+     rule(4,"сфери будівельних робіт","будівельник",[4]).
+     rule(5,"сфери будівельних робіт","бурильник",[5]).
+     rule(6,"сфери обслуговування","бариста",[6]).
+     rule(7,"сфери обслуговування","бармен",[7]).
+     rule(8,"сфери обслуговування","бортпровідник",[8]).
+     rule(9,"сфери обслуговування","банкір",[9]).
+     rule(10,"сфери обслуговування","баєр",[10]).   
+
+main:-
+   assert_database,
+   do_expert_job.
+
+do_expert_job:-
+    do_consulting,
+    halt.
+
+do_consulting:-
+   go([],"професія"),!.
+
+do_consulting:-
+   write("Інформація про професію, що вас цікавить відсутня"), nl,
+   clear.
+
+% Запит і отримання відповідей(так або ні) від користувача 
+ask_question(Breed_cond,Text):-
+   format("Питання : ~a?~n",[Text]),
+   write("1 - так,"),nl,
+   write("2 - ні"),nl,
+   readloop(Response),
+   do_answer(Breed_cond,Response).
+
+% Перевірка коректності введення 
+readloop(Response):-
+   %read(Response),
+   read_string(user_input, "\n", "\r",_,Str),
+   atom_number(Str, Response),
+   legal_response(Response),!.
+
+legal_response(Response):-Response=1.
+legal_response(Response):-Response=2.
+
+% Належність елемента списку 
+member(Head,[Head|_]):-!.
+member(Elem,[_|T]):-
+     member(Elem,T).
+
+%Початкове правило механізму виведення 
+go(_,Mygoal):-
+   not(rule(_,Mygoal,_,_)),!,
+   format("Рекомендована професія: ~a.~n",[Mygoal]).
+
+go(History,Mygoal):-
+   rule(Rule_number,Mygoal,Type_of_breed,Conditions),
+   check(Rule_number,History,Conditions),
+   go([Rule_number|History],Type_of_breed).
+
+
+% Зіставлення вхідних даних користувача зі списками атрибутів 
+check(Rule_number,History,[Breed_cond|Rest_breed_cond_list]):-
+   yes(Breed_cond),!,
+   check(Rule_number,History,Rest_breed_cond_list).
+
+check(_,_,[Breed_cond|_]):-
+   no(Breed_cond),!,fail.
+
+check(Rule_number,History,[Breed_cond|Rest_breed_cond_list]):-
+   cond(Breed_cond,Text),
+   ask_question(Breed_cond,Text),
+   check(Rule_number,History,Rest_breed_cond_list).
+
+check(_,_,[]).
+
+do_answer(Cond_number,1):-!,
+   assertz(yes(Cond_number)).
+
+do_answer(Cond_number,2):-!,
+   assertz(no(Cond_number)),fail.
+   
+% Виключення даних з бази знань після завершення циклу "Розпізнавання-дія"   
+erase:-retract(_),fail.
+erase.
+
+% Знищення в базі даних всіх відповідей так і ні 
+clear:-retract(yes(_)),retract(no(_)),retract(goes(_,_)),fail,!.
+clear.
+
+:- main.

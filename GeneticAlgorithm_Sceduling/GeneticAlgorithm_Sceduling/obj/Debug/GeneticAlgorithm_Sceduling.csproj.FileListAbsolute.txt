@@ -1,0 +1,7 @@
+D:\C#\GeneticAlgorithm_Sceduling\GeneticAlgorithm_Sceduling\bin\Debug\GeneticAlgorithm_Sceduling.exe.config
+D:\C#\GeneticAlgorithm_Sceduling\GeneticAlgorithm_Sceduling\bin\Debug\GeneticAlgorithm_Sceduling.exe
+D:\C#\GeneticAlgorithm_Sceduling\GeneticAlgorithm_Sceduling\bin\Debug\GeneticAlgorithm_Sceduling.pdb
+D:\C#\GeneticAlgorithm_Sceduling\GeneticAlgorithm_Sceduling\obj\Debug\GeneticAlgorithm_Sceduling.csprojAssemblyReference.cache
+D:\C#\GeneticAlgorithm_Sceduling\GeneticAlgorithm_Sceduling\obj\Debug\GeneticAlgorithm_Sceduling.csproj.CoreCompileInputs.cache
+D:\C#\GeneticAlgorithm_Sceduling\GeneticAlgorithm_Sceduling\obj\Debug\GeneticAlgorithm_Sceduling.exe
+D:\C#\GeneticAlgorithm_Sceduling\GeneticAlgorithm_Sceduling\obj\Debug\GeneticAlgorithm_Sceduling.pdb

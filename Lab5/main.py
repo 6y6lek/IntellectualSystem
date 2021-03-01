@@ -110,40 +110,7 @@ for key, var in variables.items():
     random.shuffle(domains[key])
 
 
-def hasDuplicates(schedule):
-    for slot in Slot.slots:
-        groups = list(schedule.keys())
-        for group in groups:
-            thisGroupSch = schedule[group]
-            thisCourse = [s for s in thisGroupSch if s['slot'] == slot]
-            if not thisCourse or not thisCourse[0]['course']:
-                continue
-            thisCourseSlot = thisCourse[0]
-            otherGroups = groups.copy()
-            otherGroups.remove(group)
-            for otherGroup in otherGroups:
-                otherSchedule = schedule[otherGroup]
-                for pos in otherSchedule:
-                    otherSlot = pos['slot']
-                    if otherSlot == slot:
-                        masterProf = thisCourseSlot['professor']
-                        masterRoom = thisCourseSlot['room']
-                        masterCourse = thisCourseSlot['course']
-                        masterIsLab = thisCourseSlot['is_lab']
 
-                        thisProf = pos['professor']
-                        thisRoom = pos['room']
-                        thisCourse = pos['course']
-                        thisIsLab = pos['is_lab']
-
-                        sameProf = masterProf == thisProf
-                        sameRoom = masterRoom == thisRoom
-                        samePractice = masterIsLab == thisIsLab
-
-                        if (sameProf or sameRoom or samePractice):
-                            if (sameProf and (not sameRoom or not samePractice)) or (
-                                    sameRoom and (not sameProf or not samePractice)):
-                                print(f'Duplicate! Slot: {slot}, groups: {group}-{otherGroup}')
 
 
 
@@ -159,8 +126,6 @@ def pretty_print(schedule, variables, values):
                                     'professor': key_sch[2],
                                     'slot': value_sch[0],
                                     'room': value_sch[1]})
-
-    hasDuplicates(by_group)
 
     for key, values in by_group.items():
         print(key)
